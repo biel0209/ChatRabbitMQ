@@ -1,2 +1,6 @@
+/home/ubuntu/environment/ExemploRabbitMQ/src/main/java/br/ufs/dcomp/ExemploRabbitMQ/Chat.java
 /home/ubuntu/environment/ExemploRabbitMQ/src/main/java/br/ufs/dcomp/ExemploRabbitMQ/Receptor.java
+/home/ubuntu/environment/ExemploRabbitMQ/src/main/java/br/ufs/dcomp/ExemploRabbitMQ/Serializador.java
 /home/ubuntu/environment/ExemploRabbitMQ/src/main/java/br/ufs/dcomp/ExemploRabbitMQ/Emissor.java
+/home/ubuntu/environment/ExemploRabbitMQ/src/main/java/br/ufs/dcomp/ExemploRabbitMQ/Desserializador.java
+/home/ubuntu/environment/ExemploRabbitMQ/src/main/java/br/ufs/dcomp/ExemploRabbitMQ/MensagemOuterClass.java

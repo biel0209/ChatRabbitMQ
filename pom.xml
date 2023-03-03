@@ -14,7 +14,7 @@
           <archive>
             <manifest>
               <mainClass>
-                br.ufs.dcomp.ExemploRabbitMQ.Receptor
+                br.ufs.dcomp.ExemploRabbitMQ.Chat
               </mainClass>
             </manifest>
           </archive>
@@ -32,20 +32,24 @@
   </properties>
   <dependencies>
     <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>4.13.3</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
       <groupId>com.rabbitmq</groupId>
       <artifactId>amqp-client</artifactId>
       <version>5.12.0</version>
     </dependency>
-     <dependency>
-       <groupId>org.slf4j</groupId>
-       <artifactId>slf4j-api</artifactId>
-       <version>1.7.30</version>
+    <dependency>
+      <groupId>com.google.protobuf</groupId>
+      <artifactId>protobuf-java-util</artifactId>
+      <version>3.11.1</version>
+    </dependency>
+    <dependency>
+      <groupId>com.google.protobuf</groupId>
+      <artifactId>protobuf-java</artifactId>
+      <version>3.11.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <version>1.7.30</version>
    </dependency>
    <dependency>
        <groupId>org.slf4j</groupId>

@@ -4,26 +4,114 @@ import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
 
+
 public class Emissor {
 
-  private final static String QUEUE_NAME = "minha-fila";
-
-  public static void main(String[] argv) throws Exception {
+  public ConnectionFactory createFactory() throws Exception {
     ConnectionFactory factory = new ConnectionFactory();
-    factory.setHost("ip-da-instancia-da-aws"); // Alterar
-    factory.setUsername("usuário-do-rabbitmq-server"); // Alterar
-    factory.setPassword("senha-do-rabbitmq-server"); // Alterar
-    factory.setVirtualHost("/");    Connection connection = factory.newConnection();
+    Chat chat = new Chat();
+    factory.setHost(chat.ip_aws); // Alterar          ip-da-instancia-da-aws
+    factory.setUsername("admin"); // Alterar     usuário-do-rabbitmq-server
+    factory.setPassword("password"); // Alterar            senha-do-rabbitmq-server
+    factory.setVirtualHost("/");
+    return factory;
+  }
+  public void createQueue(String user) throws Exception {
+    ConnectionFactory factory = createFactory();
+    Connection connection = factory.newConnection();
     Channel channel = connection.createChannel();
 
-                      //(queue-name, durable, exclusive, auto-delete, params); 
+    String QUEUE_NAME = user;
+
+    //(queue-name, durable, exclusive, auto-delete, params);
     channel.queueDeclare(QUEUE_NAME, false,   false,     false,       null);
 
-    String message = "Olá!!!";
-    
-                    //  (exchange, routingKey, props, message-body             ); 
-    channel.basicPublish("",       QUEUE_NAME, null,  message.getBytes("UTF-8"));
-    System.out.println(" [x] Mensagem enviada: '" + message + "'");
+    channel.close();
+    connection.close();
+  }
+
+  public void createExchange(String user, String EXCHANGE_NAME) throws Exception {
+    ConnectionFactory factory = createFactory();
+    Connection connection = factory.newConnection();
+    Channel channel = connection.createChannel();
+
+    channel.exchangeDeclare(EXCHANGE_NAME, "fanout");
+
+    String queueName = user;
+
+    channel.queueBind(queueName, EXCHANGE_NAME, "");
+
+    channel.close();
+    connection.close();
+  }
+
+  public void deleteExchange(String EXCHANGE_NAME) throws Exception {
+    ConnectionFactory factory = createFactory();
+    Connection connection = factory.newConnection();
+    Channel channel = connection.createChannel();
+
+    channel.exchangeDelete(EXCHANGE_NAME);
+
+    channel.close();
+    connection.close();
+  }
+
+
+  public void addUser(String user, String EXCHANGE_NAME) throws Exception {
+    ConnectionFactory factory = createFactory();
+    Connection connection = factory.newConnection();
+    Channel channel = connection.createChannel();
+
+    String queueName = user;
+
+    channel.queueBind(queueName, EXCHANGE_NAME, "");
+
+    channel.close();
+    connection.close();
+  }
+
+  public void removeUser(String user, String EXCHANGE_NAME) throws Exception {
+    ConnectionFactory factory = createFactory();
+    Connection connection = factory.newConnection();
+    Channel channel = connection.createChannel();
+
+    String queueName = user;
+
+    channel.queueUnbind(queueName, EXCHANGE_NAME, "");
+
+    channel.close();
+    connection.close();
+  }
+
+  public void simpleSend(String userReceiver, byte[] message) throws Exception {
+    ConnectionFactory factory = createFactory();
+    Connection connection = factory.newConnection();
+    Channel channel = connection.createChannel();
+
+    String QUEUE_NAME = userReceiver;
+
+    //(queue-name, durable, exclusive, auto-delete, params);
+    channel.queueDeclare(QUEUE_NAME, false,   false,     false,       null);  //caso o usuário de destino não exista
+
+    //  (exchange, routingKey, props, message-body             );
+    channel.basicPublish("",       userReceiver, null,  message);
+
+    channel.close();
+    connection.close();
+  }
+
+  public void multipleSend(String receiver, byte[] message) throws Exception {
+    ConnectionFactory factory = createFactory();
+    Connection connection = factory.newConnection();
+    Channel channel = connection.createChannel();
+
+    String EXCHANGE_NAME = receiver;
+
+    //(queue-name, durable, exclusive, auto-delete, params);
+    channel.exchangeDeclare(EXCHANGE_NAME, "fanout");
+
+    //  (exchange, routingKey, props, message-body             );
+    channel.basicPublish(EXCHANGE_NAME, "", null, message);
 
     channel.close();
     connection.close();

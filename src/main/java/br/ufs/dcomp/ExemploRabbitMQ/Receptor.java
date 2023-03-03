@@ -5,34 +5,49 @@ import com.rabbitmq.client.*;
 import java.io.IOException;
 
 public class Receptor {
-
-  private final static String QUEUE_NAME = "minha-fila";
-
-  public static void main(String[] argv) throws Exception {
+  public void receive(String user) throws Exception {
     ConnectionFactory factory = new ConnectionFactory();
-    factory.setHost("ip-da-instancia-da-aws"); // Alterar
-    factory.setUsername("usuário-do-rabbitmq-server"); // Alterar
-    factory.setPassword("senha-do-rabbitmq-server"); // Alterar
-    factory.setVirtualHost("/");    Connection connection = factory.newConnection();
+    Chat chat = new Chat();
+    factory.setHost(chat.ip_aws); // Alterar          ip-da-instancia-da-aws
+    factory.setUsername("admin"); // Alterar     usuário-do-rabbitmq-server
+    factory.setPassword("password"); // Alterar            senha-do-rabbitmq-server
+    factory.setVirtualHost("/");
     Connection connection = factory.newConnection();
     Channel channel = connection.createChannel();
 
-                      //(queue-name, durable, exclusive, auto-delete, params); 
-    channel.queueDeclare(QUEUE_NAME, false,   false,     false,       null);
-    
-    System.out.println(" [*] Esperando recebimento de mensagens...");
+    String QUEUE_NAME = user;
 
     Consumer consumer = new DefaultConsumer(channel) {
       public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body)           throws IOException {
 
-        String message = new String(body, "UTF-8");
-        System.out.println(" [x] Mensagem recebida: '" + message + "'");
+//        String message = new String(body, "UTF-8");
+        MensagemOuterClass.Mensagem message = MensagemOuterClass.Mensagem.parseFrom(body);
 
-                        //(deliveryTag,               multiple);
-        //channel.basicAck(envelope.getDeliveryTag(), false);
+        // Extraindo dados da mensagem
+        String emissor = message.getEmissor();
+        String date = message.getData();
+        String hora = message.getHora();
+        String group = message.getGrupo();
+        MensagemOuterClass.Conteudo conteudo = message.getConteudo();
+        String tipoConteudo = conteudo.getTipo();
+        String corpoConteudo = conteudo.getCorpo().toStringUtf8();
+        String nomeConteudo = conteudo.getNome();
+
+        if(group.equals("")){      //se group é uma string vazia, a mensagem foi enviada apenas para uma pessoa
+          System.out.println("\n" + "(" + date + " às " + hora + ") " + emissor + " diz: " + corpoConteudo);
+        }else{
+          System.out.println("\n" + "(" + date + " às " + hora + ") " + emissor + "#" + group + " diz: " + corpoConteudo);
+        }
+
+//        (deliveryTag,               multiple);
+        channel.basicAck(envelope.getDeliveryTag(), false);    //confirmar o recebimento ao rabbitmq
       }
     };
-                      //(queue-name, autoAck, consumer);    
+    //(queue-name, autoAck, consumer);
     channel.basicConsume(QUEUE_NAME, true,    consumer);
   }
 }
+
+
+
+
