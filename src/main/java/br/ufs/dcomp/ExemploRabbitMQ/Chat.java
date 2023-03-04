@@ -9,11 +9,8 @@ public class Chat {
 
     static String user;
     static String receiver;
-<<<<<<< HEAD
-    static String view = " ";
-=======
     static String view = "";
->>>>>>> a9c9c38ad1613c8e232f36c762471daabc375a5f
+
     final static String ip_aws = "100.25.19.83";
     public static void main(String[] argv) throws Exception {
         Scanner sc = new Scanner(System.in);
