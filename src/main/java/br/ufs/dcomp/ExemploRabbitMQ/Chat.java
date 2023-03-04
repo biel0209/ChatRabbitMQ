@@ -10,7 +10,7 @@ public class Chat {
     static String user;
     static String receiver;
     static String view = " ";
-    final static String ip_aws = "100.26.224.49";
+    final static String ip_aws = "34.227.93.195";
     public static void main(String[] argv) throws Exception {
         Scanner sc = new Scanner(System.in);
         Emissor emissor = new Emissor();

@@ -2,17 +2,19 @@ package br.ufs.dcomp.ExemploRabbitMQ;
 
 import com.google.protobuf.ByteString;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 public class Serializador
 {
     public byte[] serialize(String mensagemFonte, String emissor, String group) throws Exception {
 
         //Capturando data e hora
-        Date dateHourCurrent = new Date();
-        String date = new SimpleDateFormat("dd/MM/yyyy").format(dateHourCurrent);
-        String hour = new SimpleDateFormat("HH:mm").format(dateHourCurrent);
+        ZoneId saoPauloZoneId = ZoneId.of("America/Sao_Paulo");
+        LocalDateTime now = LocalDateTime.now(saoPauloZoneId);
+        String hour = now.getHour() + ":" + now.getMinute() + ":" + now.getSecond();
+        String date = now.toLocalDate().toString();
+
 
         // Obtendo a representação em bytes da mensagem
         ByteString msg = ByteString.copyFromUtf8(mensagemFonte);
