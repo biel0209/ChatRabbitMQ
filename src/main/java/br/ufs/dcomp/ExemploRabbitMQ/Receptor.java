@@ -31,12 +31,13 @@ public class Receptor {
 
         if(group.equals("")){      //se group é uma string vazia, a mensagem foi enviada apenas para uma pessoa
           System.out.println("\n" + "(" + date + " às " + hora + ") " + emissor + " diz: " + corpoConteudo);
-        }else{
+        }else if(!group.equals("") && !emissor.equals(user)){
           System.out.println("\n" + "(" + date + " às " + hora + ") " + emissor + "#" + group + " diz: " + corpoConteudo);
+          Chat chat = new Chat();
+          System.out.print(chat.view + ">> ");
         }
 
-        Chat chat = new Chat();
-        System.out.print(chat.view + ">> ");
+
 
 //        (deliveryTag,               multiple);
 //        channel.basicAck(envelope.getDeliveryTag(), false);    //confirmar o recebimento ao rabbitmq
