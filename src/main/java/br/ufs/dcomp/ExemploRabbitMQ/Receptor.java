@@ -19,11 +19,7 @@ public class Receptor {
 
     Consumer consumer = new DefaultConsumer(channel) {
       public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body)           throws IOException {
-
-//        String message = new String(body, "UTF-8");
         MensagemOuterClass.Mensagem message = MensagemOuterClass.Mensagem.parseFrom(body);
-
-        // Extraindo dados da mensagem
         String emissor = message.getEmissor();
         String date = message.getData();
         String hora = message.getHora();
@@ -38,6 +34,9 @@ public class Receptor {
         }else{
           System.out.println("\n" + "(" + date + " às " + hora + ") " + emissor + "#" + group + " diz: " + corpoConteudo);
         }
+
+        Chat chat = new Chat();
+        System.out.print(chat.view + ">> ");
 
 //        (deliveryTag,               multiple);
         channel.basicAck(envelope.getDeliveryTag(), false);    //confirmar o recebimento ao rabbitmq
