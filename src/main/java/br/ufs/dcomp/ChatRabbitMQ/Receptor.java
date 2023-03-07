@@ -38,8 +38,6 @@ public class Receptor {
           System.out.print(chat.view + ">> ");
         }
 
-
-
 //        (deliveryTag,               multiple);
 //        channel.basicAck(envelope.getDeliveryTag(), false);    //confirmar o recebimento ao rabbitmq
       }
