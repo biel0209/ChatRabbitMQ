@@ -1,4 +1,4 @@
-package br.ufs.dcomp.ExemploRabbitMQ;
+package br.ufs.dcomp.ChatRabbitMQ;
 
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;

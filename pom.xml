@@ -1,10 +1,10 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>br.ufs.dcomp.ExemploRabbitMQ</groupId>
-  <artifactId>ExemploRabbitMQJava</artifactId>
+  <groupId>br.ufs.dcomp.ChatRabbitMQ</groupId>
+  <artifactId>ChatRabbitMQJava</artifactId>
   <packaging>jar</packaging>
   <version>1.0-SNAPSHOT</version>
-  <name>ExemploRabbitMQJava</name>
+  <name>ChatRabbitMQJava</name>
   <url>http://maven.apache.org</url>
   <build>
     <plugins>
@@ -14,7 +14,7 @@
           <archive>
             <manifest>
               <mainClass>
-                br.ufs.dcomp.ExemploRabbitMQ.Chat
+                  br.ufs.dcomp.ChatRabbitMQ.Chat
               </mainClass>
             </manifest>
           </archive>

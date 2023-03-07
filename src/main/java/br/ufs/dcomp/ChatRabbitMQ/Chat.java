@@ -1,7 +1,5 @@
-package br.ufs.dcomp.ExemploRabbitMQ;
+package br.ufs.dcomp.ChatRabbitMQ;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Scanner;
 
 
@@ -11,7 +9,7 @@ public class Chat {
     static String receiver;
     static String view = "";
 
-    final static String ip_aws = "100.25.19.83";
+    final static String ip_aws = "100.26.10.181";
     public static void main(String[] argv) throws Exception {
         Scanner sc = new Scanner(System.in);
         Emissor emissor = new Emissor();

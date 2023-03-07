@@ -1,4 +1,4 @@
-package br.ufs.dcomp.ExemploRabbitMQ;
+package br.ufs.dcomp.ChatRabbitMQ;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
