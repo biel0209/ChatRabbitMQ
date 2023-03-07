@@ -29,11 +29,12 @@ public class Receptor {
         String corpoConteudo = conteudo.getCorpo().toStringUtf8();
         String nomeConteudo = conteudo.getNome();
 
+        Chat chat = new Chat();
         if(group.equals("")){      //se group é uma string vazia, a mensagem foi enviada apenas para uma pessoa
           System.out.println("\n" + "(" + date + " às " + hora + ") " + emissor + " diz: " + corpoConteudo);
+          System.out.print(chat.view + ">> ");
         }else if(!group.equals("") && !emissor.equals(user)){
           System.out.println("\n" + "(" + date + " às " + hora + ") " + emissor + "#" + group + " diz: " + corpoConteudo);
-          Chat chat = new Chat();
           System.out.print(chat.view + ">> ");
         }
 
