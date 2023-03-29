@@ -9,7 +9,7 @@ public class Chat {
     static String receiver;
     static String view = "";
 
-    final static String ip_aws = "100.26.10.181";
+    final static String ip_aws = "34.204.60.36";
     public static void main(String[] argv) throws Exception {
         Scanner sc = new Scanner(System.in);
         Emissor emissor = new Emissor();
@@ -22,6 +22,7 @@ public class Chat {
         emissor.createQueue(user);
 
         receptor.receive(user);
+        receptor.receive(user + "_file");
 
         String message = "";
 
@@ -56,6 +57,20 @@ public class Chat {
                         exChange = arguments[1];
                         emissor.deleteExchange(exChange);
                         break;
+                    case "!upload":
+                        String filePath = arguments[1];
+                        if (view.substring(0, 1).equals("@")){  // Upload de arquivo para uma única pessoa
+                            byte[] arquivo = serializador.serialize(filePath, user, "", true);
+                            System.out.println("Enviando " + filePath + " para @" + receiver + ".");
+                            emissor.simpleSend(receiver + "_file", arquivo);
+                            System.out.println("Arquivo " + filePath + " foi enviado para @" + receiver + ".");
+                        }else if (view.substring(0, 1).equals("#")){  // Upload de arquivo para um grupo
+                            String group = view.substring(view.indexOf("#") + 1);
+                            byte[] arquivo = serializador.serialize(filePath, user, group, true);
+                            System.out.println("Enviando " + filePath + " para o grupo #" + group + ".");
+                            emissor.multipleSend(receiver + "_file", arquivo);
+                            System.out.println("Arquivo " + filePath + " foi enviado para o grupo #" + receiver + ".");
+                        }
                 }
             }
             else if (message.substring(0, 1).equals("#")) {
@@ -64,7 +79,7 @@ public class Chat {
                 receiver = group;
             }
             else if (view.substring(0, 1).equals("#")){
-                byte[] msg = serializador.serialize(message, user, receiver);
+                byte[] msg = serializador.serialize(message, user, receiver, false);
                 emissor.multipleSend(receiver, msg);
             }
             else if (message.equals("exit")){
@@ -72,7 +87,7 @@ public class Chat {
             }
             else{
                 //string vazia representa que a mensagem não é pra um grupo
-                byte[] msg = serializador.serialize(message, user, "");
+                byte[] msg = serializador.serialize(message, user, "", false);
                 emissor.simpleSend(receiver, msg);
             }
 
