@@ -58,6 +58,7 @@ public class Receptor {
           in.write(corpoConteudo.toByteArray());
           in.flush();
           in.close();
+          System.out.println("\n" + "(" + date + " às " + hora + ") Arquivo \"" + nomeConteudo + "\" recebido de @" + emissor + ".");
         }
 
 
