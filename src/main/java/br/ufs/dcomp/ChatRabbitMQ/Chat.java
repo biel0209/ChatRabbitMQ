@@ -9,7 +9,7 @@ public class Chat {
     static String receiver;
     static String view = "";
 
-    final static String ip_aws = "34.204.60.36";
+    final static String ip_aws = "54.89.75.155";
     public static void main(String[] argv) throws Exception {
         Scanner sc = new Scanner(System.in);
         Emissor emissor = new Emissor();
@@ -68,7 +68,7 @@ public class Chat {
                             String group = view.substring(view.indexOf("#") + 1);
                             byte[] arquivo = serializador.serialize(filePath, user, group, true);
                             System.out.println("Enviando " + filePath + " para o grupo #" + group + ".");
-                            emissor.multipleSend(receiver + "_file", arquivo);
+                            emissor.multipleSend(group, arquivo, true);
                             System.out.println("Arquivo " + filePath + " foi enviado para o grupo #" + receiver + ".");
                         }
                 }
@@ -80,7 +80,7 @@ public class Chat {
             }
             else if (view.substring(0, 1).equals("#")){
                 byte[] msg = serializador.serialize(message, user, receiver, false);
-                emissor.multipleSend(receiver, msg);
+                emissor.multipleSend(receiver, msg, false);
             }
             else if (message.equals("exit")){
                 break;
@@ -90,7 +90,6 @@ public class Chat {
                 byte[] msg = serializador.serialize(message, user, "", false);
                 emissor.simpleSend(receiver, msg);
             }
-
             System.out.print(view + ">> ");
         }
 //        sc.close();

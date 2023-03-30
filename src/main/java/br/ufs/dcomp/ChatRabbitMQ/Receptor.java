@@ -31,10 +31,11 @@ public class Receptor {
         MensagemOuterClass.Conteudo conteudo = message.getConteudo();
         String tipoConteudo = conteudo.getTipo();
 
+        Chat chat = new Chat();
+
         if (tipoConteudo.equals("text/plain")){
           String corpoConteudo = conteudo.getCorpo().toStringUtf8();
           String nomeConteudo = conteudo.getNome();
-          Chat chat = new Chat();
           if(group.equals("")){      //se group é uma string vazia, a mensagem foi enviada apenas para uma pessoa
             System.out.println("\n" + "(" + date + " às " + hora + ") " + emissor + " diz: " + corpoConteudo);
             System.out.print(chat.view + ">> ");
@@ -58,7 +59,13 @@ public class Receptor {
           in.write(corpoConteudo.toByteArray());
           in.flush();
           in.close();
-          System.out.println("\n" + "(" + date + " às " + hora + ") Arquivo \"" + nomeConteudo + "\" recebido de @" + emissor + ".");
+
+          //Tratamento para evitar a impressão de recebimento da mensagem para o próprio emissor dela.
+          if(!emissor.equals(user.substring(0, user.indexOf('_')))){    //Retirar o "_file" da variavel user
+            System.out.println("\n" + "(" + date + " às " + hora + ") Arquivo \"" + nomeConteudo + "\" recebido de @" + emissor + ".");
+            System.out.print(chat.view + ">> ");
+          }
+
         }
 
 
