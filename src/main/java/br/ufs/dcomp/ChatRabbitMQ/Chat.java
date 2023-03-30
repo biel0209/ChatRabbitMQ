@@ -60,16 +60,12 @@ public class Chat {
                     case "!upload":
                         String filePath = arguments[1];
                         if (view.substring(0, 1).equals("@")){  // Upload de arquivo para uma única pessoa
-                            byte[] arquivo = serializador.serialize(filePath, user, "", true);
-                            System.out.println("Enviando " + filePath + " para @" + receiver + ".");
-                            emissor.simpleSend(receiver + "_file", arquivo);
-                            System.out.println("Arquivo " + filePath + " foi enviado para @" + receiver + ".");
+                            UploaderArquivo uploader = new UploaderArquivo(filePath, user, "", receiver, false);
+                            uploader.start();
                         }else if (view.substring(0, 1).equals("#")){  // Upload de arquivo para um grupo
                             String group = view.substring(view.indexOf("#") + 1);
-                            byte[] arquivo = serializador.serialize(filePath, user, group, true);
-                            System.out.println("Enviando " + filePath + " para o grupo #" + group + ".");
-                            emissor.multipleSend(group, arquivo, true);
-                            System.out.println("Arquivo " + filePath + " foi enviado para o grupo #" + receiver + ".");
+                            UploaderArquivo uploader = new UploaderArquivo(filePath, user, group, group, true);
+                            uploader.start();
                         }
                 }
             }
