@@ -9,7 +9,7 @@ public class Chat {
     static String receiver;
     static String view = "";
 
-    final static String ip_aws = "54.89.75.155";
+    final static String ip_aws = "44.215.149.128";
     public static void main(String[] argv) throws Exception {
         Scanner sc = new Scanner(System.in);
         Emissor emissor = new Emissor();
@@ -67,6 +67,14 @@ public class Chat {
                             UploaderArquivo uploader = new UploaderArquivo(filePath, user, group, group, true);
                             uploader.start();
                         }
+                    case "!listUsers":
+                        exChange = arguments[1];
+                        emissor.listUsers(exChange);
+                        break;
+                    case "!listGroups":
+                        emissor.listGroups(user);
+                        break;
+
                 }
             }
             else if (message.substring(0, 1).equals("#")) {

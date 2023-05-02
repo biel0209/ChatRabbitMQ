@@ -3,7 +3,15 @@ package br.ufs.dcomp.ChatRabbitMQ;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Emissor {
 
@@ -100,6 +108,74 @@ public class Emissor {
 
     channel.close();
     connection.close();
+  }
+
+  public void listUsers(String EXCHANGE_NAME) throws Exception {
+    ConnectionFactory factory = createFactory();
+    Connection connection1 = factory.newConnection();
+    Channel channel = connection1.createChannel();
+
+    String host = "44.196.99.16";
+    String vhost = "%2f";
+    String exchangeName = EXCHANGE_NAME;
+
+    ObjectMapper objectMapper = new ObjectMapper();
+    String baseUrl = String.format("http://%s/api/exchanges/%s/%s/bindings/source",
+            host, vhost, exchangeName);
+    URL url = new URL(baseUrl);
+    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+    connection.setRequestMethod("GET");
+    connection.setDoOutput(true);
+    connection.setRequestProperty("Authorization", "Basic " +
+            java.util.Base64.getEncoder().encodeToString("admin:password".getBytes()));
+    connection.connect();
+    InputStream inputStream = connection.getInputStream();
+
+    JsonNode bindings = objectMapper.readTree(inputStream);
+    String allUsers = "";
+    for (JsonNode binding : bindings) {
+      String queueName = binding.get("destination").asText();
+      if(!queueName.endsWith("_file"))
+        allUsers += queueName + ", ";
+    }
+    System.out.println(allUsers.substring(0, allUsers.length() - 2));
+
+    channel.close();
+    connection1.close();
+  }
+
+  public void listGroups(String user) throws Exception {
+    ConnectionFactory factory = createFactory();
+    Connection connection1 = factory.newConnection();
+    Channel channel = connection1.createChannel();
+
+    String host = "44.196.99.16";
+    String vhost = "%2f";
+
+    ObjectMapper objectMapper = new ObjectMapper();
+    String baseUrl = String.format("http://%s/api/queues/%s/%s/bindings",
+            host, vhost, user);
+
+    URL url = new URL(baseUrl);
+    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+    connection.setRequestMethod("GET");
+    connection.setDoOutput(true);
+    connection.setRequestProperty("Authorization", "Basic " +
+            java.util.Base64.getEncoder().encodeToString("admin:password".getBytes()));
+    connection.connect();
+    InputStream inputStream = connection.getInputStream();
+
+    JsonNode bindings = objectMapper.readTree(inputStream);
+    String allGroups = "";
+    for (JsonNode binding : bindings) {
+      String queueName = binding.get("source").asText();
+      if(!queueName.endsWith("_file"))
+        allGroups += queueName + ", ";
+    }
+    System.out.println(allGroups.substring(2, allGroups.length() - 2));
+
+    channel.close();
+    connection1.close();
   }
 
   public void simpleSend(String userReceiver, byte[] message) throws Exception {
