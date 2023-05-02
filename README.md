@@ -26,3 +26,11 @@ Projeto final da disciplina de Sistemas Distribuídos de 2022.2.
 ### Envio de arquivos
 
 !upload /home/tarcisio/aula1.pdf -> realizar envio do arquivo aula1.pdf para o destinário setado atualmente.
+
+### Listagem de usuários pertencentes a um determinado grupo
+
+!listUser amigos -> listar os usuários que pertencem ao grupo amigos
+
+### Listagem de todos os grupos que o usuário que está logado está inserido
+
+!listGroups
