@@ -1,17 +1,14 @@
 package br.ufs.dcomp.ChatRabbitMQ;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 
 public class Emissor {
 
@@ -115,7 +112,7 @@ public class Emissor {
     Connection connection1 = factory.newConnection();
     Channel channel = connection1.createChannel();
 
-    String host = "44.196.99.16";
+    String host = "RabbitMQ-SD-LB-Application-1892710110.us-east-1.elb.amazonaws.com";
     String vhost = "%2f";
     String exchangeName = EXCHANGE_NAME;
 
@@ -138,8 +135,12 @@ public class Emissor {
       if(!queueName.endsWith("_file"))
         allUsers += queueName + ", ";
     }
-    System.out.println(allUsers.substring(0, allUsers.length() - 2));
-
+    if(allUsers.length() <= 2)
+    {
+      System.out.println("Este grupo não possui usuários!");
+    }else{
+      System.out.println(allUsers.substring(2, allUsers.length() - 2));
+    }
     channel.close();
     connection1.close();
   }
@@ -149,7 +150,7 @@ public class Emissor {
     Connection connection1 = factory.newConnection();
     Channel channel = connection1.createChannel();
 
-    String host = "44.196.99.16";
+    String host = "RabbitMQ-SD-LB-Application-1892710110.us-east-1.elb.amazonaws.com";
     String vhost = "%2f";
 
     ObjectMapper objectMapper = new ObjectMapper();
@@ -172,8 +173,12 @@ public class Emissor {
       if(!queueName.endsWith("_file"))
         allGroups += queueName + ", ";
     }
-    System.out.println(allGroups.substring(2, allGroups.length() - 2));
-
+    if(allGroups.length() <= 2)
+    {
+      System.out.println("Você não esta em nenhum grupo!");
+    }else{
+      System.out.println(allGroups.substring(2, allGroups.length() - 2));
+    }
     channel.close();
     connection1.close();
   }

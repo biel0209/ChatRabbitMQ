@@ -9,7 +9,7 @@ public class Chat {
     static String receiver;
     static String view = "";
 
-    final static String ip_aws = "44.215.149.128";
+    final static String ip_aws = "RabbitMQ-SD-LB-Network-5db364f9d99a904a.elb.us-east-1.amazonaws.com";
     public static void main(String[] argv) throws Exception {
         Scanner sc = new Scanner(System.in);
         Emissor emissor = new Emissor();
@@ -67,6 +67,7 @@ public class Chat {
                             UploaderArquivo uploader = new UploaderArquivo(filePath, user, group, group, true);
                             uploader.start();
                         }
+                        break;
                     case "!listUsers":
                         exChange = arguments[1];
                         emissor.listUsers(exChange);
